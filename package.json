@@ -1,0 +1,33 @@
+{
+  "name": "tdd",
+  "version": "1.0.0",
+  "description": "Testing Authantication endpoints",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "config": "^3.3.8",
+    "esm": "^3.2.25",
+    "express": "^4.13.4",
+    "mongoose": "^6.8.0",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/register": "^7.18.9",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.1.0",
+    "nodemon": "^2.0.20",
+    "nyc": "^15.1.0"
+  },
+  "scripts": {
+    "dev": "SET NODE_ENV=dev && nodemon -r esm src/server.js",
+    "test": "nyc mocha --recursive --require @babel/polyfill --require @babel/register ./test/*.js --timeout 500000000 --exit"
+  },
+  "author": "NKUBITO",
+  "license": "ISC"
+}
