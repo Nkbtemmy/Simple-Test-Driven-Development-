@@ -1,14 +1,13 @@
 let mongoose = require('mongoose');
 let config = require('config');
+import dotenv from 'dotenv';
+dotenv.config();
 
-let DBHost = config.util.getEnv('NODE_ENV') !== 'test' ? "mongodb://127.0.0.1:27017/Testing_dev?authSource=admin":"mongodb://127.0.0.1:27017/Testing?authSource=admin";
+let DBHost = process.env.NODE_ENV !== 'test' ? process.env.DB_DEV:process.env.DB_TEST;
 
 mongoose.connect(DBHost,{
     useNewUrlParser: true, 
     useUnifiedTopology: true,
-    // useFindAndModify:false,
-    // useCreateIndex:true,
-    // strictQuery:false
 },
 (err) => {
     if (!err) {

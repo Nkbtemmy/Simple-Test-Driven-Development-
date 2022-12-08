@@ -6,6 +6,8 @@
   "dependencies": {
     "body-parser": "^1.15.1",
     "config": "^3.3.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "esm": "^3.2.25",
     "express": "^4.13.4",
     "mongoose": "^6.8.0",
@@ -25,7 +27,7 @@
     "nyc": "^15.1.0"
   },
   "scripts": {
-    "dev": "SET NODE_ENV=dev && nodemon -r esm src/server.js",
+    "dev": "nodemon -r esm src/server.js",
     "test": "nyc mocha --recursive --require @babel/polyfill --require @babel/register ./test/*.js --timeout 500000000 --exit"
   },
   "author": "NKUBITO",
