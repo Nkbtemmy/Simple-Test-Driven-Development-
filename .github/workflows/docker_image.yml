@@ -1,41 +1,29 @@
-name: Docker Image
-on:
-  push:
-    branches:
-      - develop
-  workflow_dispatch:
+# name: Test Driven Development
 
-jobs:
-    build:
-      runs-on: ubuntu-latest
-      concurrency: 
-        group: docker_image
-        cancel-in-progress: false
-      steps:
-        - uses: actions/checkout@v3
-        - name: Uses Node.js 
-          uses: actions/setup-node@v3
-          with:
-            node-version: 16.x
-            cache: 'npm'
+# on:
+#   push:
+#     branches: 
+#       - develop
+#       - main
+#     paths-ignore:
+#       - '**.md'
+#   pull_request:
+#     branches: [develop,main]
+#     paths-ignore:
+#       - '**.md'
+# jobs:
+#     build:
+#       runs-on: ${{matrix.os}}
+#       strategy:
+#         matrix:
+#           os: [ubuntu-latest, windows-latest, macos-latest]
+#       concurrency: 
+#         group: docker_image
+#         cancel-in-progress: false
+#       steps:
+#         - uses: actions/checkout@v2
+#         - name: Build Docker image
+#           run: docker build -t tdd:latest .
+#         - name: Push Docker image
+#           run: docker push tdd:latest
             
-        - run: npm install
-        - run: npm run build    
-        - name: Build and publish Docker Image
-          uses: mr-smithers-excellent/docker-build-push@v5
-          with:
-            image: procech20/atlp-pulse
-            registry: docker.io
-            username: ${{ secrets.DOCKER_HUB_USERNAME }}
-            password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-    deploy:
-      runs-on: ubuntu-latest
-      concurrency: deployment
-      needs: [build]
-      steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}} 
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}} #Must be unique in Heroku
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
