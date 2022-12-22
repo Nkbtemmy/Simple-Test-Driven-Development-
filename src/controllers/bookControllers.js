@@ -4,7 +4,7 @@ export default class BookControllers{
 
  static async postBook(req, res) {
         //Creates a new book
-        var newBook = new Book(req.body);
+        var newBook = new Book(...req.body);
         //Save it into the DB.
         newBook.save((err,book) => {
             if(err) {
