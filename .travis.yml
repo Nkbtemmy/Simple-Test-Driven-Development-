@@ -1,7 +1,4 @@
 sudo: false
-env:
-  global:
-    - CC_TEST_REPORTER_ID=5a2e4619896eb6f574ab6d98089b42915bfaaccb642c17c997a71c18920343d4
 language: node_js
 node_js:
   - 'stable'
@@ -12,10 +9,10 @@ services:
 before_script:
   - sleep 15
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-script:
+script: 
   - npm run build
-  - npm run test
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests; fi'
 notifications:
   email: false
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+   

@@ -1,4 +1,4 @@
-name: Test Driven Development
+name: Build
 
 on:
   push:
