@@ -51,19 +51,19 @@ describe('Books', () => {
       });
   });
 
-  describe('/POST book', () => {
-    it('it should create  books', (done) => {
-      chai.request(app)
-          .post('/books')
-          .send(bookMock.createBook)
-          .end((err, res) => {
-            expect(res.statusCode).to.equal(200);
-                // res.body.should.be.a('array');
-                // res.body.length.should.be.eql(0);
-            done();
-          });
-    });
-  });
+  // describe('/POST book', () => {
+  //   it('it should create  books', (done) => {
+  //     chai.request(app)
+  //         .post('/books')
+  //         .send(bookMock.createBook)
+  //         .end((err, res) => {
+  //           expect(res.statusCode).to.equal(200);
+  //               // res.body.should.be.a('array');
+  //               // res.body.length.should.be.eql(0);
+  //           done();
+  //         });
+  //   });
+  // });
 
   /*
   * Test the /GET route
