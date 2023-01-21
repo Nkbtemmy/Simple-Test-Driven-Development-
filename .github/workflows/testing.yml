@@ -15,27 +15,57 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x,19.x]
+        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
+    # services:
+    #   mongodb: stable
+    # steps:
+    # - uses: actions/checkout@v3
+    # - name: Use Node.js ${{ matrix.node-version }
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: ${{ matrix.node-version }}
+    # - name: Install dependencies
+    #   run: npm ci
+    # - name: Start MongoDB
+    #   run: mongod --dbpath ${{ env.GITHUB_WORKSPACE }}/data/db
+    # - name: Wait for MongoDB
+    #   run: sleep 15
+    # - name: Test
+    #   run: npm test
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install dependencies
-      run: npm ci
-    - name: Test
-      run: npm test
-    - name: Generate code coverage
-      run: npm run coverage
-    - name: Send coverage report to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-    - name: Send a notification to Slack
-      uses: slack/actions/slack-message@v2
-      with:
-        status: success
-        message: Deployment to Heroku was successful!
-        color: good
-        slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+
+      - name: Generate code coverage
+        run: npm run coverage
+      - name: Send coverage report to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Send a notification to Slack
+        uses: slack/actions/slack-message@v2
+        with:
+          status: success
+          message: Deployment to Heroku was successful!
+          color: good
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+      - run: npm install
+
+      - run: npm test
+        env:
+          CI: true
