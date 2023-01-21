@@ -40,31 +40,26 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.8.0
         with:
-          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-version: latest
 
-      - name: Generate code coverage
-        run: npm run coverage
-      - name: Send coverage report to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Send a notification to Slack
-        uses: slack/actions/slack-message@v3
-        with:
-          status: success
-          message: Deployment to Heroku was successful!
-          color: good
-          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Install dependencies
+        run: npm install
 
-      - run: npm install
+      - name: Install dev dependencies
+        run: npm install --only=dev
+
+      # - name: Send coverage report to Codecov
+      #   uses: codecov/codecov-action@v1
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
 
       - run: npm test
         env:
