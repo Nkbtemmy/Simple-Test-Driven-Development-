@@ -3,7 +3,7 @@
 [![Build](https://github.com/Nkbtemmy/Simple-Test-Driven-Development-/actions/workflows/building.yml/badge.svg)](https://github.com/Nkbtemmy/Simple-Test-Driven-Development-/actions/workflows/building.yml)[![Test Coverage](https://api.codeclimate.com/v1/badges/ecd50de02a9e5b9864a1/test_coverage)](https://codeclimate.com/github/nkbtemmy/Simple-Test-Driven-Development/test_coverage)
 [![Coverage Status](https://coveralls.io/repos/github/Nkbtemmy/Simple-Test-Driven-Development-/badge.svg?branch=build)](https://coveralls.io/github/Nkbtemmy/Simple-Test-Driven-Development-?branch=build)
 [![Coverage Status](https://coveralls.io/repos/github/Nkbtemmy/Simple-Test-Driven-Development-/badge.svg?branch=build)](https://coveralls.io/github/Nkbtemmy/Simple-Test-Driven-Development-?branch=build)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ecd50de02a9e5b9864a1/test_coverage)](https://codeclimate.com/github/nkbtemmy/Simple-Test-Driven-Development/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ecd50de02a9e5b9864a1/test_coverage)](https://codeclimate.com/github/nkbtemmy/Simple-Test-Driven-Development/test_coverage)[![Test Node.js CI](https://github.com/Nkbtemmy/Simple-Test-Driven-Development-/actions/workflows/testing.yml/badge.svg)](https://github.com/Nkbtemmy/Simple-Test-Driven-Development-/actions/workflows/testing.yml)
 ### Clone this repository if you didn't
 
 
