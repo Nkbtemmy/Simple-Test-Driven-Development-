@@ -1,0 +1,44 @@
+version: 2.1
+orbs:
+  node: cimg/node:19.6.0
+jobs:
+  build:
+    docker:
+      - image: cimg/base:stable
+      - image: cimg/node:19.6.0
+      - image: cimg/postgres:15.1.0
+        environment:
+          POSTGRES_USER: myuser
+          POSTGRES_DB: mydatabase
+          POSTGRES_PASSWORD: mypassword
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: npm install
+      - run:
+          name: Wait for Postgres
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Run tests
+          command: npm test
+      - run:
+          command: npm run build
+          name: Build app
+      - deploy:
+          name: Deploy to Production
+          command: ./deploy.sh
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - .
+
+workflows:
+  test_my_app:
+    jobs:
+      - build_and_test
+      - deploy:
+          requires:
+            - build_and_test # only deploy if the build_and_test job has completed
+          filters:
+            branches:
+              only: main # only deploy when on main
