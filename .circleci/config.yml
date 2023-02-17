@@ -1,44 +1,124 @@
 version: 2.1
+
 orbs:
-  node: circleci/node@5.1.0
+  node: circleci/node@5.0.2
+
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/base:stable
-      - image: cimg/node:19.6.0
-      - image: cimg/postgres:15.1.0
+      - image: circleci/mongo:4.4
         environment:
-          POSTGRES_USER: myuser
-          POSTGRES_DB: mydatabase
-          POSTGRES_PASSWORD: mypassword
-    working_directory: ~/app
+          MONGO_USERNAME: mongouser
+          MONGO_PASSWORD: mongopass
     steps:
       - checkout
-      - run: npm install
+      - node/install:
+          install-yarn: true
       - run:
-          name: Wait for Postgres
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          name: MongoDB Install
+          command: |
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+            echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+            sudo apt-get update
+            sudo apt-get install -y mongodb-org-shell
+      - setup_remote_docker
       - run:
-          name: Run tests
-          command: npm test
+          name: Install npm dependencies
+          command: |
+            yarn install
       - run:
-          command: npm run build
-          name: Build app
-      - deploy:
-          name: Deploy to Production
-          command: ./deploy.sh
-      - persist_to_workspace:
-          root: ~/app
-          paths:
-            - .
+          name: Waiting for Mongo
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+      - run:
+          name: Run Unit Tests
+          command: |
+            npm run test
+      - run:
+          name: Saving the coveralls
+          command: |
+            npm run test:coverage   
+  build:
+      docker:
+        - image: cimg/base:stable
+        - image: cimg/node:19.6.0
+      steps:
+        - checkout
+        - node/install:
+            install-yarn: true
+        - run:
+            name: Install packages
+            command: |
+              yarn install
+        - run:
+            name: Build
+            command: |
+              yarn build
+notify: false   # disables notifications for this job
 
+# workflows:
+#   test_my_app:
+#     jobs:
+#       - build:
+#           notify: false
+#       - test:
+#           notify: false
 workflows:
-  test_my_app:
+  version: 2
+  build-and-deploy:
     jobs:
-      - build_and_test
-      - deploy:
-          requires:
-            - build_and_test # only deploy if the build_and_test job has completed
+      - build:
           filters:
             branches:
-              only: main # only deploy when on main
+              only: develop
+      - node/test:
+          test-results-for: mocha
+
+# version: 2.1
+# orbs:
+#   node: circleci/node@5.1.0
+#   # coveralls: coveralls/coveralls@1.0.6
+# jobs:
+#   build:
+#     docker:
+#       - image: cimg/base:stable
+#       - image: cimg/node:19.6.0
+#       - image: cimg/postgres:15.1-postgis
+#         environment:
+#           POSTGRES_USER: myuser
+#           POSTGRES_DB: mydatabase
+#           POSTGRES_PASSWORD: mypassword
+#     working_directory: ~/app
+#     steps:
+#       - checkout
+#       - run: sudo npm install -g npm@latest
+#       - node/install-packages:
+#           cache-path: ~/project/node_modules
+#           override-ci-command: npm install
+#       # - run: sudo npm install -g yarn
+#       # - run: yarn install
+#       - run:
+#           name: Wait for Postgres
+#           command: dockerize -wait tcp://localhost:5432 -timeout 1m
+#       - run:
+#           name: Run tests
+#           command: npm run test
+#       # - coveralls/upload
+#       - run:
+#           name: Build app
+#           command: npm run build
+#       - deploy:
+#           name: Deploy to Production
+#           command: ./deploy.sh
+#       - persist_to_workspace:
+#           root: ~/app
+#           paths:
+#             - .
+
+# workflows:
+#   run-npm-command:
+#     jobs:
+#       # - node/build:
+#       #     npm-run: build
+#       - build
+
