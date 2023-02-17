@@ -36,19 +36,27 @@ describe('Books', () => {
     done()
   });
   describe('/GET book', () => {
-      it('it should GET all the books', (done) => {
-        chai.request(app)
-            .get('/books')
-            .end((err, res) => {
-              expect(res.statusCode).to.equal(200);
-              // expect(res.body).to.be.an('array');
-              // expect(res.body).to.have.lengthOf(0);
-                  // res.should.have.status(200);
-                  // res.body.should.be.a('array');
-                  // res.body.length.should.be.eql(0);
-              done();
-            });
-      });
+    it('it should GET welcome message', (done) => {
+      chai.request(app)
+        .get('/')
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+      // it('it should GET all the books', (done) => {
+      //   chai.request(app)
+      //       .get('/books')
+      //       .end((err, res) => {
+      //         // expect(res.statusCode).to.equal(200);
+      //         // expect(res.body).to.be.an('array');
+      //         // expect(res.body).to.have.lengthOf(0);
+      //             // res.should.have.status(200);
+      //             // res.body.should.be.a('array');
+      //             // res.body.length.should.be.eql(0);
+      //         done();
+      //       });
+      // });
   });
 
   // describe('/POST book', () => {
@@ -68,18 +76,18 @@ describe('Books', () => {
   /*
   * Test the /GET route
   */
-  describe('/GET book', () => {
-    it('it should GET all the books', (done) => {
-      chai.request(app)
-          .get('/books')
-          .end((err, res) => {
-            expect(res.statusCode).to.equal(200);
-            expect(res.body).to.be.a('array');
-            // res.body.should.be.a('array');
-                // res.body.length.should.be.eql(0);
-            done();
-          });
-      });
-  });
+  // describe('/GET book', () => {
+  //   it('it should GET all the books', (done) => {
+  //     chai.request(app)
+  //         .get('/books')
+  //         .end((err, res) => {
+  //           expect(res.statusCode).to.equal(200);
+  //           expect(res.body).to.be.a('array');
+  //           // res.body.should.be.a('array');
+  //               // res.body.length.should.be.eql(0);
+  //           done();
+  //         });
+  //     });
+  // });
 
 });

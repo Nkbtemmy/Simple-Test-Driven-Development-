@@ -31,7 +31,7 @@
     "dev": "nodemon -r esm src/server.js",
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
     "start": "npm run build && node --require @babel/polyfill ./dist/server.js",
-    "test": "nyc mocha --recursive --require @babel/polyfill --require @babel/register ./test/*.js --timeout 500000000 --exit",
+    "test": "mocha --recursive --require @babel/polyfill --require @babel/register ./test/*.js --timeout 500000000 --exit",
     "test:coverage": "mocha --coverage --recursive --require @babel/polyfill --require @babel/register ./test/*.js --timeout 500000000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
